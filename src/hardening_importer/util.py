@@ -25,7 +25,9 @@ def get_logger(verbosity: int = None):
             stderr.setLevel(40)
         logger.addHandler(stderr)
 
-        if os.path.exists('/dev/log'):
+        # This will (generally) only not exist inside a container.
+        # nocover is needed because our CI is inside a container :)
+        if os.path.exists('/dev/log'):  # pragma: nocover
             syslog = logging.handlers.SysLogHandler(address='/dev/log')
             syslog.setFormatter(formatter)
             syslog.setLevel(logging.INFO)
