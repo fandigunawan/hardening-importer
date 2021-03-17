@@ -1,6 +1,4 @@
 stages:
-  - lint
-  - security
   - test
   - build
   - publish
@@ -10,12 +8,12 @@ default:
     - pip3 install tox
 
 pylint:
-  stage: lint
+  stage: test
   script:
     - tox -e lint
 
 bandit:
-  stage: security
+  stage: test
   script:
     - tox -e security
 
