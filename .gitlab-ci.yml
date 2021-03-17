@@ -57,10 +57,10 @@ twine:
 
       [gitlab]
       repository = https://gitlab.jharmison.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi
-      username = gitlab-ci-token
-      password = ${CI_JOB_TOKEN}
+      username = ${CI_DEPLOY_USER}
+      password = ${CI_DEPLOY_PASSWORD}
       EOF
-    - TWINE_REPOSITORY=gitlab tox -e release
+    - tox -e release
   needs:
     - setuptools
   only:
