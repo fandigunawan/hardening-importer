@@ -4,9 +4,17 @@ stages:
   - build
   - publish
 
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cache/pip
+
 default:
   before_script:
-    - pip install tox
+    - pip install --upgrade --cache-dir="$PIP_CACHE_DIR" tox pip
 
 pylint:
   stage: test
