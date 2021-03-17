@@ -1,0 +1,53 @@
+stages:
+  - lint
+  - security
+  - test
+  - build
+  - publish
+
+default:
+  before_script:
+    - pip3 install tox
+
+pylint:
+  stage: lint
+  script:
+    - tox -e lint
+
+bandit:
+  stage: security
+  script:
+    - tox -e security
+
+pytest:
+  stage: test
+  script:
+    - tox -e clean,test,report
+  artifacts:
+    reports:
+      cobertura: coverage.xml
+
+setuptools:
+  stage: build
+  script:
+    - tox -e build
+  needs:
+    - pylint
+    - bandit
+    - pytest
+  artifacts:
+    paths:
+      - dist
+
+twine:
+  stage: publish
+  script:
+    - >
+        TWINE_USERNAME=gitlab-ci-token
+        TWINE_PASSWORD=${CI_JOB_TOKEN}
+        TWINE_REPOSITORY=https://gitlab.jharmison.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi
+        tox -e release
+  needs:
+    - setuptools
+  only:
+    - tags
