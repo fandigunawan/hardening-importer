@@ -5,7 +5,7 @@ stages:
 
 default:
   before_script:
-    - pip3 install tox
+    - dnf -y install python3-tox
 
 pylint:
   stage: test
