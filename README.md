@@ -2,6 +2,10 @@
 
 Ingest Iron Bank hardening manifests, produce a build environment.
 
+## Prerequisites
+
+You must configure a GitLab personal access token to use HTTP basic auth. Please see the user profile page for creating these tokens [here](https://gitlab.jharmison.com/-/profile/personal_access_tokens). You will be required to input this token to authenticate.
+
 ## Usage
 
 ```sh
