@@ -32,3 +32,21 @@ def test_verbose_logger():
     logger2 = get_logger()
     assert logger == logger2
     logger.handlers.clear()
+
+
+def test_syslog_logger():
+    """Test that a syslog logger problem won't break things deeply."""
+    import os
+    if not os.path.exists('/dev/log'):
+        logger = get_logger()
+        logger.debug("Test message")
+        logger.handlers.clear()
+        with open('/dev/log', 'w') as f:
+            f.write("")
+        logger = get_logger()
+        logger.debug("Test message")
+        os.remove('/dev/log')
+    else:
+        logger = get_logger()
+        logger.debug("Test message")
+    logger.handlers.clear()
