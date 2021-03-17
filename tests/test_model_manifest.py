@@ -26,9 +26,7 @@ def test_str_enum():
     testenum = TestStrEnum('Enum Variable 1')
     assert testenum == 'Enum Variable 1'
     # Validate Enum restrictions on value
-    with pytest.raises(ValueError,
-                       match=("'Enum Variable 3' is not a valid "
-                              "test_str_enum.<locals>.TestStrEnum")):
+    with pytest.raises(ValueError, match='is not a valid'):
         _ = TestStrEnum('Enum Variable 3')
 
 
