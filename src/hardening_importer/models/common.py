@@ -9,6 +9,7 @@ from enum import Enum
 
 class StrEnum(str, Enum):
     """Represent a choice between a fixed set of strings.
+
     A mix-in of string and enum, representing itself as the string value.
     """
 

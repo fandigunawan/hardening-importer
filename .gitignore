@@ -1,5 +1,11 @@
 *.pyc
 __pycache__
+.coverage
+.eggs
+coverage.xml
+*.egg-info
+.tox
 dist
 venv
 tags
+*.swp

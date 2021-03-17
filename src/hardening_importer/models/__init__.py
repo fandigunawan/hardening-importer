@@ -3,3 +3,7 @@
 This subpackage contains the modules for modelling Hardening Manifest schema,
 simultaneously validating and loading them into Python data structures.
 """
+
+from .manifest import HardeningManifest
+
+__all__ = ["HardeningManifest"]

@@ -3,6 +3,7 @@
 This module is for encapsulating the schema of the manifest and validating it.
 """
 
+import yaml
 from pydantic import BaseModel, Field
 from typing import Dict, List, Optional
 
@@ -11,6 +12,7 @@ from .common import StrEnum
 
 class ResourceValidationType(StrEnum):
     """The type of validations that are supported."""
+
     SHA256 = 'sha256'
     SHA512 = 'sha512'
 
@@ -49,3 +51,10 @@ class HardeningManifest(BaseModel):
     labels: Optional[Dict[str, str]]
     resources: Optional[List[HardeningResource]]
     maintainers: List[HardeningManifestMaintainer]
+
+    @classmethod
+    def from_yaml(cls, yaml_file: str) -> 'HardeningManifest':
+        """Instantiate a HardeningManifest from a yaml file path."""
+        with open(yaml_file) as f:
+            manifest = yaml.safe_load(f)
+        return cls.parse_obj(manifest)
