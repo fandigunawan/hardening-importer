@@ -1,3 +1,4 @@
+image: registry.access.redhat.com/ubi8/python-38:latest
 stages:
   - test
   - build
@@ -5,7 +6,7 @@ stages:
 
 default:
   before_script:
-    - dnf -y install python3-tox python3-pip git
+    - pip install tox
 
 pylint:
   stage: test
