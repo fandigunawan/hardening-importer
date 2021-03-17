@@ -5,7 +5,7 @@ stages:
 
 default:
   before_script:
-    - dnf -y install python3-tox
+    - dnf -y install python3-tox python3-pip git
 
 pylint:
   stage: test
