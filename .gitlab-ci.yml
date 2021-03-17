@@ -60,7 +60,7 @@ twine:
       username = ${CI_DEPLOY_USER}
       password = ${CI_DEPLOY_PASSWORD}
       EOF
-    - tox -e release
+    - TWINE_REPOSITORY=gitlab tox -e release
   needs:
     - setuptools
   only:
