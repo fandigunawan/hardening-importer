@@ -4,11 +4,13 @@ This module contains the main CLI functions based on Click.
 """
 
 import click
+import os
 import sys
 
 from .. import __version__
 from ..util import get_logger
 from .util import verbose_opt
+from ..models import HardeningManifest
 
 
 @click.group()
@@ -29,9 +31,44 @@ def main(verbose):
 
 @main.command('import')
 @verbose_opt
-def import_manifest(verbose):
+@click.option('--manifest-path', '-m', default='hardening_manifest.yaml',
+              type=click.Path(),
+              help=('The path to a hardening manifest YAML file, relative to '
+                    'PATH'))
+@click.option('--dockerfile-path', '-d', default='Dockerfile',
+              type=click.Path(),
+              help='The path to the Dockerfile, relative to PATH')
+@click.option('--build-executor', '-b', default='kaniko',
+              type=click.Choice(['kaniko']),
+              help=('The executor that a build argument list should be '
+                    'prepared for.'))
+@click.option('--registry', '-r', default='quay.io',
+              help='The registry to which the image should be pushed.')
+@click.argument('path', nargs=1, default='.',
+                type=click.Path(
+                    exists=True,
+                    file_okay=False,
+                    dir_okay=True,
+                    resolve_path=True
+                ))
+def import_manifest(verbose, manifest_path, dockerfile_path, build_executor,
+                    registry, path):
     """Import an Iron Bank Hardening Manifest for image builds."""
     logger = get_logger(verbose)
     logger.debug(sys.argv)
     logger.debug(f'verbose: {verbose}')
-    raise NotImplementedError('This work is TBD.')
+    if not (os.path.exists(manifest_path) and
+            os.path.isfile(manifest_path)):
+        raise click.FileError(manifest_path)
+    if not (os.path.exists(dockerfile_path) and
+            os.path.isfile(dockerfile_path)):
+        raise click.FileError(dockerfile_path)
+
+    manifest = HardeningManifest.from_yaml(manifest_path)
+    manifest.download_resources()
+    click.echo(' '.join(manifest.build_args(
+        context_dir=path,
+        dockerfile=dockerfile_path,
+        registry=registry,
+        executor=build_executor
+    )))
