@@ -32,7 +32,7 @@ pytest:
     - tox -e clean,test,report
   artifacts:
     paths:
-      - coverage.xml
+      - htmlcov/
     reports:
       cobertura: coverage.xml
 

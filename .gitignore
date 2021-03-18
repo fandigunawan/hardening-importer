@@ -8,4 +8,6 @@ coverage.xml
 dist
 venv
 tags
+build
+htmlcov
 *.swp
