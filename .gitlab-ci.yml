@@ -30,8 +30,9 @@ pytest:
   stage: test
   script:
     - tox -e clean,test,report
-    - ls -halF
   artifacts:
+    paths:
+      - coverage.xml
     reports:
       cobertura: coverage.xml
 
