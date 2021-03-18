@@ -1,5 +1,7 @@
 # Hardening Importer
 
+[![coverage report](https://gitlab.jharmison.com/dco/hardening-importer/badges/main/coverage.svg)](https://gitlab.jharmison.com/dco/hardening-importer/-/commits/main)
+
 Ingest Iron Bank hardening manifests, produce a build environment.
 
 ## Prerequisites
