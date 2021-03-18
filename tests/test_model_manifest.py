@@ -9,6 +9,7 @@ from pydantic import ValidationError
 
 from hardening_importer.models import HardeningManifest
 from hardening_importer.models.common import StrEnum
+
 from .conftest import VALID_MANIFESTS, INVALID_MANIFESTS
 
 
