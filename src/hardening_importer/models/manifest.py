@@ -104,3 +104,26 @@ class HardeningManifest(BaseModel):
         logger.info(f'Downloading resources for {self.name}')
         for resource in self.resources:
             resource.download_and_validate()
+
+    def _kaniko_args(self,
+                     context_dir: str = None,
+                     dockerfile: str = 'Dockerfile',
+                     registry: str = 'quay.io') -> List[str]:
+        """Build a command line argument set for Kaniko."""
+        args = ['--context', context_dir]
+        args += ['--dockerfile', os.path.join(context_dir, dockerfile)]
+        for tag in self.tags:
+            args += ['--destination', f'{registry}/{self.name}:{tag}']
+        return args
+
+    def build_args(self,
+                   context_dir: str = None,
+                   dockerfile: str = 'Dockerfile',
+                   registry: str = 'quay.io',
+                   executor: str = 'kaniko') -> List[str]:
+        """Build a command line argument set for the executor."""
+        if executor == 'kaniko':
+            return self._kaniko_args(context_dir=context_dir,
+                                     dockerfile=dockerfile, registry=registry)
+        else:
+            raise RuntimeError(f'Unable to prepare build args for {executor}')
