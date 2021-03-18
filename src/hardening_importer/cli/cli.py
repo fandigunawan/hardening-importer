@@ -6,13 +6,14 @@ This module contains the main CLI functions based on Click.
 import click
 import sys
 
+from .. import __version__
 from ..util import get_logger
 from .util import verbose_opt
 
 
 @click.group()
 @verbose_opt
-@click.version_option()
+@click.version_option(version=__version__)
 def main(verbose):
     """Work with Iron Bank Hardening Manifests.
 
