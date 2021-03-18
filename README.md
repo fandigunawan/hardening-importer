@@ -9,7 +9,9 @@ You must configure a GitLab personal access token to use HTTP basic auth. Please
 ## Usage
 
 ```sh
-pip3 install --user git+https://gitlab.jharmison.com/dco/hardening-importer.git@main
+# When prompted for your username, enter `__token__`
+# When prompted for your password, enter your personal GitLab access token
+pip3 install --user hardening-importer --extra-index-url https://gitlab.jharmison.com/api/v4/projects/4/packages/pypi/simple
 hardening import .
 ```
 
