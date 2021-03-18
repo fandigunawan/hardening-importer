@@ -21,4 +21,4 @@ Parses the hardening_manifest.yaml file located in the provided directory and do
 
 ## Advanced usage
 
-You can run `hardening-import --help` to get more detailed usage instructions.
+You can run `hardening import --help` to get more detailed usage instructions.
