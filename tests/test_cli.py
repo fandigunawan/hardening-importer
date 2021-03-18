@@ -32,3 +32,11 @@ def test_verbosity():
     # Remove this when implemented
     assert result.exception
     assert int(logger.handlers[0].level) == 10
+
+
+def test_version():
+    """Test the hardening command version output."""
+    runner = CliRunner()
+    args = shlex.split('--version')
+    result = runner.invoke(cli, args)
+    assert result.exit_code == 0

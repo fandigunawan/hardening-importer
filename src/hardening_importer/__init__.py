@@ -11,6 +11,6 @@ from importlib.metadata import version, PackageNotFoundError
 
 try:
     __version__ = version("hardening-importer")
-except PackageNotFoundError:
+except PackageNotFoundError:  # pragma: nocover
     # Package is not installed.
     pass
