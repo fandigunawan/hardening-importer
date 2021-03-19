@@ -44,7 +44,7 @@ class HardeningResource(BaseModel):
     url: str
     validation: HardeningResourceValidation
 
-    def download_and_validate(self) -> None:
+    def download_and_validate(self, output: str = None) -> None:
         """Download from the URL, validate the hash, write the file."""
         logger = get_logger()
         # Download from URL
@@ -61,8 +61,15 @@ class HardeningResource(BaseModel):
         # Compare the digests
         if self.validation.validate_hash(data_hash.hexdigest()):
             # Write the file
-            logger.info(f'Writing file to {self.filename} in {os.getcwd()}')
-            with open(self.filename, 'wb') as f:
+            if output is not None:
+                output = os.path.realpath(output)
+                os.makedirs(output, exist_ok=True)
+                outfile = os.path.join(output, self.filename)
+            else:
+                output = os.getcwd()
+                outfile = self.filename
+            logger.info(f'Writing file to {self.filename} in {output}')
+            with open(outfile, 'wb') as f:
                 f.write(data)
         else:
             raise ChecksumValidationError((
@@ -98,12 +105,12 @@ class HardeningManifest(BaseModel):
             manifest = yaml.safe_load(f)
         return cls.parse_obj(manifest)
 
-    def download_resources(self) -> None:
+    def download_resources(self, output: str = None) -> None:
         """Download all subordinate resources."""
         logger = get_logger()
         logger.info(f'Downloading resources for {self.name}')
         for resource in self.resources:
-            resource.download_and_validate()
+            resource.download_and_validate(output=output)
 
     def _kaniko_args(self,
                      context_dir: str = None,
