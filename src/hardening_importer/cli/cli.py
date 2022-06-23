@@ -3,6 +3,7 @@
 This module contains the main CLI functions based on Click.
 """
 
+from email.policy import default
 import click
 import os
 import sys
@@ -44,7 +45,7 @@ def main(verbose):
                     'prepared for.'))
 @click.option('--registry', '-r', default='quay.io',
               help='The registry to which the image should be pushed.')
-@click.option('--download-only', '-o', default=False, help='Download only mode')
+@click.option('--download-only', is_flag=True, help='Download only mode')
 @click.argument('path', nargs=1, default='.',
                 type=click.Path(
                     exists=True,
