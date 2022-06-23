@@ -44,6 +44,7 @@ def main(verbose):
                     'prepared for.'))
 @click.option('--registry', '-r', default='quay.io',
               help='The registry to which the image should be pushed.')
+@click.option('--download-only', '-o', default=False, help='Download only mode')
 @click.argument('path', nargs=1, default='.',
                 type=click.Path(
                     exists=True,
@@ -52,7 +53,7 @@ def main(verbose):
                     resolve_path=True
                 ))
 def import_manifest(verbose, manifest_path, dockerfile_path, build_executor,
-                    registry, path):
+                    registry, path, download_only):
     """Import an Iron Bank Hardening Manifest for image builds."""
     logger = get_logger(verbose)
     logger.debug(sys.argv)
@@ -60,15 +61,16 @@ def import_manifest(verbose, manifest_path, dockerfile_path, build_executor,
     if not (os.path.exists(manifest_path) and
             os.path.isfile(manifest_path)):
         raise click.FileError(manifest_path)
-    if not (os.path.exists(dockerfile_path) and
-            os.path.isfile(dockerfile_path)):
-        raise click.FileError(dockerfile_path)
 
     manifest = HardeningManifest.from_yaml(manifest_path)
     manifest.download_resources()
-    click.echo(' '.join(manifest.build_args(
-        context_dir=path,
-        dockerfile=dockerfile_path,
-        registry=registry,
-        executor=build_executor
-    )))
+    if not download_only:
+        if not (os.path.exists(dockerfile_path) and
+            os.path.isfile(dockerfile_path)):
+            raise click.FileError(dockerfile_path)
+        click.echo(' '.join(manifest.build_args(
+            context_dir=path,
+            dockerfile=dockerfile_path,
+            registry=registry,
+            executor=build_executor
+        )))
