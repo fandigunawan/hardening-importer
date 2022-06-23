@@ -104,6 +104,16 @@ class HardeningManifest(BaseModel):
         logger.info(f'Downloading resources for {self.name}')
         for resource in self.resources:
             resource.download_and_validate()
+    
+    def clean_resource(self) -> None:
+        logger = get_logger()
+        logger.info(f'Clean resources of {self.name}')
+        for resource in self.resources:
+            if os.path.exists(resource.filename) and os.path.isfile(resource.filename):
+                logger.info(f'Delete file {resource.filename}')
+                os.remove(resource.filename)
+            else:
+                logger.warn(f'Could not find file {resource.filename}')
 
     def _kaniko_args(self,
                      context_dir: str = None,

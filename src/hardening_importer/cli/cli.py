@@ -75,3 +75,21 @@ def import_manifest(verbose, manifest_path, dockerfile_path, build_executor,
             registry=registry,
             executor=build_executor
         )))
+        
+@main.command('clean')
+@verbose_opt
+@click.option('--manifest-path', '-m', default='hardening_manifest.yaml',
+              type=click.Path(),
+              help=('The path to a hardening manifest YAML file, relative to '
+                    'PATH'))
+def clean(verbose, manifest_path):
+    """Clean resources from import command."""
+    logger = get_logger(verbose)
+    logger.debug(sys.argv)
+    logger.debug(f'verbose: {verbose}')
+    if not (os.path.exists(manifest_path) and
+            os.path.isfile(manifest_path)):
+        raise click.FileError(manifest_path)
+
+    manifest = HardeningManifest.from_yaml(manifest_path)
+    manifest.clean_resource()
